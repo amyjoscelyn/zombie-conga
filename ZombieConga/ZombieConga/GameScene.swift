@@ -10,7 +10,10 @@ import SpriteKit
 
 class GameScene: SKScene
 {
+    let playableRect: CGRect
+    
     let zombie = SKSpriteNode(imageNamed: "zombie1")
+    
     var lastUpdateTime: TimeInterval = 0
     var dt: TimeInterval = 0
     let zombieMovePointsPerSecond: CGFloat = 480.0
@@ -18,6 +21,35 @@ class GameScene: SKScene
     // 2D Vectors represent a direction and a length (such as points per second)
     
     //SpriteKit calls this method before it presents this scene in a view, so it's a good place to do some initial setup of the scene's contents
+    
+    override init(size: CGSize)
+    {
+        let maxAspectRatio: CGFloat = 16.0 / 9.0
+        let playableHeight = size.width / maxAspectRatio
+        let playableMargin = (size.height - playableHeight) / 2.0
+        playableRect = CGRect(x: 0,
+                              y: playableMargin,
+                              width: size.width,
+                              height: playableHeight)
+        super.init(size: size)
+    }
+    
+    required init(coder aDecoder: NSCoder)
+    {
+        fatalError("init(coder) has not been implemented")
+    }
+    
+    func debugDrawPlayableArea()
+    {
+        let shape = SKShapeNode()
+        let path = CGMutablePath()
+        path.addRect(playableRect)
+        shape.path = path
+        shape.strokeColor = SKColor.red
+        shape.lineWidth = 4.0
+        addChild(shape)
+    }
+    
     override func didMove(to view: SKView)
     {
         backgroundColor = SKColor.black
@@ -42,6 +74,8 @@ class GameScene: SKScene
         
         let mySize = background.size
         print("Size: \(mySize)")
+        
+        debugDrawPlayableArea()
     }
     
     override func update(_ currentTime: TimeInterval)
@@ -112,8 +146,10 @@ class GameScene: SKScene
     
     func boundsCheckZombie()
     {
-        let bottomLeft = CGPoint.zero
-        let topRight = CGPoint(x: size.width, y: size.height)
+//        let bottomLeft = CGPoint.zero
+//        let topRight = CGPoint(x: size.width, y: size.height)
+        let bottomLeft = CGPoint(x: 0, y: playableRect.minY)
+        let topRight = CGPoint(x: size.width, y: playableRect.maxY)
         
         if zombie.position.x <= bottomLeft.x
         {
