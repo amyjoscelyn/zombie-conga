@@ -13,6 +13,7 @@
 		3DDE7F0E1DC78BF2003FD986 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDE7F0C1DC78BF2003FD986 /* Main.storyboard */; };
 		3DDE7F101DC78BF2003FD986 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DDE7F0F1DC78BF2003FD986 /* Assets.xcassets */; };
 		3DDE7F131DC78BF2003FD986 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDE7F111DC78BF2003FD986 /* LaunchScreen.storyboard */; };
+		3DDE7F1B1DC7CF7F003FD986 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE7F1A1DC7CF7F003FD986 /* MyUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		3DDE7F0F1DC78BF2003FD986 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3DDE7F121DC78BF2003FD986 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3DDE7F141DC78BF2003FD986 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DDE7F1A1DC7CF7F003FD986 /* MyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				3DDE7F021DC78BF2003FD986 /* AppDelegate.swift */,
 				3DDE7F081DC78BF2003FD986 /* GameScene.swift */,
 				3DDE7F0A1DC78BF2003FD986 /* GameViewController.swift */,
+				3DDE7F1A1DC7CF7F003FD986 /* MyUtils.swift */,
 				3DDE7F0C1DC78BF2003FD986 /* Main.storyboard */,
 				3DDE7F0F1DC78BF2003FD986 /* Assets.xcassets */,
 				3DDE7F111DC78BF2003FD986 /* LaunchScreen.storyboard */,
@@ -143,6 +146,7 @@
 				3DDE7F091DC78BF2003FD986 /* GameScene.swift in Sources */,
 				3DDE7F0B1DC78BF2003FD986 /* GameViewController.swift in Sources */,
 				3DDE7F031DC78BF2003FD986 /* AppDelegate.swift in Sources */,
+				3DDE7F1B1DC7CF7F003FD986 /* MyUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
