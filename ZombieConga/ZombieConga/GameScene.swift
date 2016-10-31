@@ -14,6 +14,7 @@ class GameScene: SKScene
     var lastUpdateTime: TimeInterval = 0
     var dt: TimeInterval = 0
     let zombieMovePointsPerSecond: CGFloat = 480.0
+    let zombieRotateRadiansPerSecond: CGFloat = 4.0 * π
     var velocity = CGPoint.zero //CGPoints can also represent 2D vectors
     // 2D Vectors represent a direction and a length (such as points per second)
     let playableRect: CGRect
@@ -110,7 +111,8 @@ class GameScene: SKScene
             move(sprite: zombie, velocity: velocity)
             boundsCheckZombie()
             
-            rotate(sprite: zombie, direction: velocity)
+//            rotate(sprite: zombie, direction: velocity)
+            rotate(sprite: zombie, direction: velocity, rotateRadiansPerSec: zombieRotateRadiansPerSecond)
         }
         
         /*
@@ -213,10 +215,14 @@ class GameScene: SKScene
         }
     }
     
-    func rotate(sprite: SKSpriteNode, direction: CGPoint)
+    func rotate(sprite: SKSpriteNode, direction: CGPoint, rotateRadiansPerSec: CGFloat)
     {
 //        sprite.zRotation = CGFloat(
 //            atan2(Double(direction.y), Double(direction.x)))
-        sprite.zRotation = direction.angle
+//        sprite.zRotation = direction.angle
+        
+        let shortest = shortestAngleBetween(angle1: sprite.zRotation, angle2: velocity.angle)
+        let amountToRotate = min(rotateRadiansPerSec * CGFloat(dt), abs(shortest))
+        sprite.zRotation += shortest.sign() * amountToRotate
     }
 }
