@@ -20,6 +20,8 @@ class GameScene: SKScene
     let playableRect: CGRect
     var lastTouchLocation = CGPoint.zero
     let zombieAnimation: SKAction
+    let catCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false)
+    let enemyCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCatLady.wav", waitForCompletion: false)
     
     //SpriteKit calls this method before it presents this scene in a view, so it's a good place to do some initial setup of the scene's contents
     
@@ -295,11 +297,13 @@ class GameScene: SKScene
     func zombieHit(cat: SKSpriteNode)
     {
         cat.removeFromParent()
+        run(catCollisionSound)
     }
     
     func zombieHit(enemy: SKSpriteNode)
     {
         enemy.removeFromParent()
+        run(enemyCollisionSound)
     }
     
     func checkCollisions()
