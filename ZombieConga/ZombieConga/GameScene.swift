@@ -63,7 +63,7 @@ class GameScene: SKScene
         background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.zPosition = -1
         
-//        background.zRotation = CGFloat(M_PI) / 8
+//        background.zRotation = CGFloat(M_PI) / 8 //to rotate the background, or anything else, by radians
         
         addChild(background)
         
@@ -71,9 +71,11 @@ class GameScene: SKScene
         print("Size: \(mySize)")
         
         zombie.position = CGPoint(x: 400, y: 400)
-//        zombie1.setScale(2)
+//        zombie1.setScale(2) //to double the size of the zombie asset
         
         addChild(zombie)
+        
+        spawnEnemy()
         
         debugDrawPlayableArea()
     }
@@ -88,7 +90,7 @@ class GameScene: SKScene
             dt = 0
         }
         lastUpdateTime = currentTime
-        print("\(dt*1000) milliseconds since last update")
+//        print("\(dt*1000) milliseconds since last update")
         
         /*
          check distance between last touch location and zombie's position
@@ -97,64 +99,34 @@ class GameScene: SKScene
          boundscheckzombie should always occur
          */
         
-        let offset = lastTouchLocation - zombie.position
-        let remainingDistance = offset.length()
-        let distanceToTravelThisFrame = zombieMovePointsPerSecond * CGFloat(dt)
+//        if let lastTouchLocation = lastTouchLocation
+//        {
+            let diff = lastTouchLocation - zombie.position
+            if diff.length() <= zombieMovePointsPerSecond * CGFloat(dt)
+            {
+                zombie.position = lastTouchLocation
+                velocity = CGPoint.zero
+            } else
+            {
+                move(sprite: zombie, velocity: velocity)
+                rotate(sprite: zombie, direction: velocity, rotateRadiansPerSec: zombieRotateRadiansPerSecond)
+            }
+//        }
         
-        if remainingDistance <= distanceToTravelThisFrame
-        {
-            zombie.position = lastTouchLocation
-            velocity = CGPoint.zero
-            boundsCheckZombie()
-        } else
-        {
-            move(sprite: zombie, velocity: velocity)
-            boundsCheckZombie()
-            
-//            rotate(sprite: zombie, direction: velocity)
-            rotate(sprite: zombie, direction: velocity, rotateRadiansPerSec: zombieRotateRadiansPerSecond)
-        }
-        
-        /*
-         if let lastTouchLocation = lastTouchLocation {
-         let diff = lastTouchLocation - zombie.position
-         if diff.length() <= zombieMovePointsPerSec * CGFloat(dt) {
-         zombie.position = lastTouchLocation
-         velocity = CGPoint.zero
-         } else {
-         move(sprite: zombie, velocity: velocity)
-         rotate(sprite: zombie, direction: velocity)
-         }
-         }
-         
-         boundsCheckZombie()
-         */
+        boundsCheckZombie()
     }
     
     func move(sprite: SKSpriteNode, velocity: CGPoint)
     {
-//        let amountToMove = CGPoint(x: velocity.x * CGFloat(dt),
-//                                   y: velocity.y * CGFloat(dt))
         let amountToMove = velocity * CGFloat(dt)
-        print("Amount to move: \(amountToMove)")
-        
-//        sprite.position = CGPoint(x: sprite.position.x + amountToMove.x,
-//                                  y: sprite.position.y + amountToMove.y)
+//        print("Amount to move: \(amountToMove)")
         sprite.position += amountToMove
     }
     
     func moveZombieToward(location: CGPoint)
     {
-//        let offset = CGPoint(x: location.x - zombie.position.x,
-//                             y: location.y - zombie.position.y)
         let offset = location - zombie.position
-//        let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
-//        let direction = CGPoint(x: offset.x / CGFloat(length),
-//                                y: offset.y / CGFloat(length))
         let direction = offset.normalized()
-        
-//        velocity = CGPoint(x: direction.x * zombieMovePointsPerSecond,
-//                           y: direction.y * zombieMovePointsPerSecond)
         velocity = direction * zombieMovePointsPerSecond
     }
     
@@ -217,12 +189,82 @@ class GameScene: SKScene
     
     func rotate(sprite: SKSpriteNode, direction: CGPoint, rotateRadiansPerSec: CGFloat)
     {
-//        sprite.zRotation = CGFloat(
-//            atan2(Double(direction.y), Double(direction.x)))
-//        sprite.zRotation = direction.angle
-        
         let shortest = shortestAngleBetween(angle1: sprite.zRotation, angle2: velocity.angle)
         let amountToRotate = min(rotateRadiansPerSec * CGFloat(dt), abs(shortest))
         sprite.zRotation += shortest.sign() * amountToRotate
+    }
+    
+    func spawnEnemy()
+    {
+        let enemy = SKSpriteNode(imageNamed: "enemy")
+        enemy.position = CGPoint(x: size.width + enemy.size.width / 2,
+                                 y: size.height / 2)
+        addChild(enemy)
+        
+        /* Initial move action
+        let actionMove = SKAction.move(to: CGPoint(x: -enemy.size.width / 2,
+                                                   y: enemy.position.y),
+                                       duration: 2.0)
+         */
+        
+        /* More complex move sequence
+        let actionMidMove = SKAction.move(
+            to: CGPoint(x: size.width / 2,
+                        y: playableRect.minY + enemy.size.height / 2),
+            duration: 1.0)
+        let actionMove = SKAction.move(
+            to: CGPoint(x: -enemy.size.width / 2,
+                        y: enemy.position.y),
+            duration: 1.0)
+        let wait = SKAction.wait(forDuration: 0.25)
+        let logMessage = SKAction.run {
+            print("Reached bottom!")
+        }
+        
+        let sequence = SKAction.sequence(
+         [actionMidMove, logMessage, wait, actionMove])
+         */
+        
+        /* new sequence, because moveBy(x:y:duration) is reversible!
+        let actionMidMove = SKAction.moveBy(
+            x: -size.width / 2 - enemy.size.width / 2,
+            y: -playableRect.height / 2 + enemy.size.height / 2,
+            duration: 1.0)
+        let actionMove = SKAction.moveBy(
+            x: -size.width / 2 - enemy.size.width / 2,
+            y: playableRect.height / 2 - enemy.size.height / 2,
+            duration: 1.0)
+        let reverseMid = actionMidMove.reversed()
+        let reverseMove = actionMove.reversed()
+        
+        let wait = SKAction.wait(forDuration: 0.25)
+        let logMessage = SKAction.run {
+            print("Reached bottom!")
+        }
+        
+        let sequence = SKAction.sequence(
+         [actionMidMove, logMessage, wait, actionMove, reverseMove, logMessage, wait, reverseMid]) */
+        
+        // sequences are also reversible!
+        let actionMidMove = SKAction.moveBy(
+            x: -size.width / 2 - enemy.size.width / 2,
+            y: -playableRect.height / 2 + enemy.size.height / 2,
+            duration: 1.0)
+        let actionMove = SKAction.moveBy(
+            x: -size.width / 2 - enemy.size.width / 2,
+            y: playableRect.height / 2 - enemy.size.height / 2,
+            duration: 1.0)
+        let wait = SKAction.wait(forDuration: 0.25)
+        let logMessage = SKAction.run {
+            print("Reached bottom!")
+        }
+        
+        let halfSequence = SKAction.sequence(
+            [actionMidMove, logMessage, wait, actionMove])
+        let sequence = SKAction.sequence([
+            halfSequence, halfSequence.reversed()])
+        
+        let repeatAction = SKAction.repeatForever(sequence)
+        enemy.run(repeatAction)
     }
 }
