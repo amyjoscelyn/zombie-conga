@@ -19,6 +19,7 @@ class GameScene: SKScene
     // 2D Vectors represent a direction and a length (such as points per second)
     let playableRect: CGRect
     var lastTouchLocation = CGPoint.zero
+    let zombieAnimation: SKAction
     
     //SpriteKit calls this method before it presents this scene in a view, so it's a good place to do some initial setup of the scene's contents
     
@@ -31,6 +32,17 @@ class GameScene: SKScene
                               y: playableMargin,
                               width: size.width,
                               height: playableHeight)
+        
+        var textures: [SKTexture] = []
+        for i in 1...4
+        {
+            textures.append(SKTexture(imageNamed: "zombie\(i)"))
+        }
+        textures.append(textures[2])
+        textures.append(textures[1])
+        
+        zombieAnimation = SKAction.animate(with: textures, timePerFrame: 0.1)
+        
         super.init(size: size)
     }
     
@@ -75,7 +87,14 @@ class GameScene: SKScene
         
         addChild(zombie)
         
-        spawnEnemy()
+//        zombie.run(SKAction.repeatForever(zombieAnimation))
+        
+        run(SKAction.repeatForever(
+            SKAction.sequence([SKAction.run() { [weak self] in
+                self?.spawnEnemy()
+                },
+                SKAction.wait(forDuration: 2.0)])))
+        // using a weak reference to `self` here, otherwise the closure passed to run(_ block:) will create a strong reference cycle and result in a memory leak
         
         debugDrawPlayableArea()
     }
@@ -106,6 +125,7 @@ class GameScene: SKScene
             {
                 zombie.position = lastTouchLocation
                 velocity = CGPoint.zero
+                stopZombieAnimation()
             } else
             {
                 move(sprite: zombie, velocity: velocity)
@@ -125,6 +145,8 @@ class GameScene: SKScene
     
     func moveZombieToward(location: CGPoint)
     {
+        startZombieAnimation()
+        
         let offset = location - zombie.position
         let direction = offset.normalized()
         velocity = direction * zombieMovePointsPerSecond
@@ -197,74 +219,30 @@ class GameScene: SKScene
     func spawnEnemy()
     {
         let enemy = SKSpriteNode(imageNamed: "enemy")
-        enemy.position = CGPoint(x: size.width + enemy.size.width / 2,
-                                 y: size.height / 2)
+        enemy.position = CGPoint(
+            x: size.width + enemy.size.width / 2,
+            y: CGFloat.random(
+                min: playableRect.minY + enemy.size.height / 2,
+                max: playableRect.maxY - enemy.size.height / 2))
         addChild(enemy)
         
-        /* Initial move action
-        let actionMove = SKAction.move(to: CGPoint(x: -enemy.size.width / 2,
-                                                   y: enemy.position.y),
-                                       duration: 2.0)
-         */
-        
-        /* More complex move sequence
-        let actionMidMove = SKAction.move(
-            to: CGPoint(x: size.width / 2,
-                        y: playableRect.minY + enemy.size.height / 2),
-            duration: 1.0)
-        let actionMove = SKAction.move(
-            to: CGPoint(x: -enemy.size.width / 2,
-                        y: enemy.position.y),
-            duration: 1.0)
-        let wait = SKAction.wait(forDuration: 0.25)
-        let logMessage = SKAction.run {
-            print("Reached bottom!")
+        let actionMove = SKAction.moveTo(x: -enemy.size.width / 2, duration: 2.0)
+        let actionRemove = SKAction.removeFromParent()
+        enemy.run(SKAction.sequence([actionMove, actionRemove]))
+    }
+    
+    func startZombieAnimation()
+    {
+        if zombie.action(forKey: "animation") == nil
+        {
+            zombie.run(
+                SKAction.repeatForever(zombieAnimation),
+                withKey: "animation")
         }
-        
-        let sequence = SKAction.sequence(
-         [actionMidMove, logMessage, wait, actionMove])
-         */
-        
-        /* new sequence, because moveBy(x:y:duration) is reversible!
-        let actionMidMove = SKAction.moveBy(
-            x: -size.width / 2 - enemy.size.width / 2,
-            y: -playableRect.height / 2 + enemy.size.height / 2,
-            duration: 1.0)
-        let actionMove = SKAction.moveBy(
-            x: -size.width / 2 - enemy.size.width / 2,
-            y: playableRect.height / 2 - enemy.size.height / 2,
-            duration: 1.0)
-        let reverseMid = actionMidMove.reversed()
-        let reverseMove = actionMove.reversed()
-        
-        let wait = SKAction.wait(forDuration: 0.25)
-        let logMessage = SKAction.run {
-            print("Reached bottom!")
-        }
-        
-        let sequence = SKAction.sequence(
-         [actionMidMove, logMessage, wait, actionMove, reverseMove, logMessage, wait, reverseMid]) */
-        
-        // sequences are also reversible!
-        let actionMidMove = SKAction.moveBy(
-            x: -size.width / 2 - enemy.size.width / 2,
-            y: -playableRect.height / 2 + enemy.size.height / 2,
-            duration: 1.0)
-        let actionMove = SKAction.moveBy(
-            x: -size.width / 2 - enemy.size.width / 2,
-            y: playableRect.height / 2 - enemy.size.height / 2,
-            duration: 1.0)
-        let wait = SKAction.wait(forDuration: 0.25)
-        let logMessage = SKAction.run {
-            print("Reached bottom!")
-        }
-        
-        let halfSequence = SKAction.sequence(
-            [actionMidMove, logMessage, wait, actionMove])
-        let sequence = SKAction.sequence([
-            halfSequence, halfSequence.reversed()])
-        
-        let repeatAction = SKAction.repeatForever(sequence)
-        enemy.run(repeatAction)
+    }
+    
+    func stopZombieAnimation()
+    {
+        zombie.removeAction(forKey: "animation")
     }
 }
