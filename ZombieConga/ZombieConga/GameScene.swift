@@ -22,9 +22,9 @@ class GameScene: SKScene
     let zombieAnimation: SKAction
     let catCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false)
     let enemyCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCatLady.wav", waitForCompletion: false)
+    var invincible = false
     
     //SpriteKit calls this method before it presents this scene in a view, so it's a good place to do some initial setup of the scene's contents
-    
     override init(size: CGSize)
     {
         let maxAspectRatio: CGFloat = 16.0 / 9.0
@@ -143,11 +143,6 @@ class GameScene: SKScene
         
         boundsCheckZombie()
 //        checkCollisions()
-    }
-    
-    override func didEvaluateActions()
-    {
-        checkCollisions()
     }
     
     func move(sprite: SKSpriteNode, velocity: CGPoint)
@@ -302,7 +297,21 @@ class GameScene: SKScene
     
     func zombieHit(enemy: SKSpriteNode)
     {
-        enemy.removeFromParent()
+        invincible = true
+        
+        let blinkTimes = 10.0
+        let duration = 3.0
+        let blinkAction = SKAction.customAction(withDuration: duration) { node, elapsedTime in
+            let slice = duration / blinkTimes
+            let remainder = Double(elapsedTime).truncatingRemainder(dividingBy: slice)
+            node.isHidden = remainder > slice / 2
+        }
+        let setHidden = SKAction.run() { [weak self] in
+            self?.zombie.isHidden = false
+            self?.invincible = false
+        }
+        zombie.run(SKAction.sequence([blinkAction, setHidden]))
+        
         run(enemyCollisionSound)
     }
     
@@ -321,6 +330,11 @@ class GameScene: SKScene
             zombieHit(cat: cat)
         }
         
+        if invincible
+        {
+            return
+        }
+        
         var hitEnemies: [SKSpriteNode] = []
         enumerateChildNodes(withName: "enemy") { node, _ in
             let enemy = node as! SKSpriteNode
@@ -333,5 +347,10 @@ class GameScene: SKScene
         {
             zombieHit(enemy: enemy)
         }
+    }
+    
+    override func didEvaluateActions()
+    {
+        checkCollisions()
     }
 }
