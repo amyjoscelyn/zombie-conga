@@ -24,6 +24,8 @@ class GameScene: SKScene
     let catCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false)
     let enemyCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCatLady.wav", waitForCompletion: false)
     var invincible = false
+    var lives = 5
+    var gameOver = false
     
     //SpriteKit calls this method before it presents this scene in a view, so it's a good place to do some initial setup of the scene's contents
     override init(size: CGSize)
@@ -145,6 +147,12 @@ class GameScene: SKScene
         
         boundsCheckZombie()
         moveTrain()
+        
+        if lives <= 0 && !gameOver
+        {
+            gameOver = true
+            print("You lose!")
+        }
     }
     
     func move(sprite: SKSpriteNode, velocity: CGPoint)
@@ -323,6 +331,8 @@ class GameScene: SKScene
         zombie.run(SKAction.sequence([blinkAction, setHidden]))
         
         run(enemyCollisionSound)
+        loseCats()
+        lives -= 1
     }
     
     func checkCollisions()
@@ -366,9 +376,11 @@ class GameScene: SKScene
     
     func moveTrain()
     {
+        var trainCount = 0
         var targetPosition = zombie.position
         
         enumerateChildNodes(withName: "train") { node, stop in
+            trainCount += 1
             if !node.hasActions()
             {
                 let actionDuration = 0.3
@@ -380,6 +392,39 @@ class GameScene: SKScene
                 node.run(moveAction)
             }
             targetPosition = node.position
+        }
+        
+        if trainCount >= 15 && !gameOver
+        {
+            gameOver = true
+            print("You win!")
+        }
+    }
+    
+    func loseCats()
+    {
+        var loseCount = 0
+        enumerateChildNodes(withName: "train") { node, stop in
+            var randomSpot = node.position
+            randomSpot.x += CGFloat.random(min: -100, max: 100)
+            randomSpot.y += CGFloat.random(min: -100, max: 100)
+            
+            node.name = ""
+            node.run(
+                SKAction.sequence([
+                    SKAction.group([
+                        SKAction.rotate(byAngle: π * 4, duration: 1.0),
+                        SKAction.move(to: randomSpot, duration: 1.0),
+                        SKAction.scale(to: 0, duration: 1.0)
+                        ]),
+                    SKAction.removeFromParent()
+                    ]))
+            loseCount += 1
+            
+            if loseCount >= 2
+            {
+                stop[0] = true
+            }
         }
     }
 }
