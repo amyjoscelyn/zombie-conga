@@ -108,7 +108,7 @@ class GameScene: SKScene
                 },
                 SKAction.wait(forDuration: 1.0)])))
         
-        debugDrawPlayableArea()
+//        debugDrawPlayableArea()
     }
     
     override func update(_ currentTime: TimeInterval)
@@ -152,6 +152,13 @@ class GameScene: SKScene
         {
             gameOver = true
             print("You lose!")
+            
+            let gameOverScene = GameOverScene(size: size, won: false)
+            gameOverScene.scaleMode = scaleMode
+            
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            
+            view?.presentScene(gameOverScene, transition: reveal)
         }
     }
     
@@ -398,6 +405,13 @@ class GameScene: SKScene
         {
             gameOver = true
             print("You win!")
+            
+            let gameOverScene = GameOverScene(size: size, won: true)
+            gameOverScene.scaleMode = scaleMode
+            
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            
+            view?.presentScene(gameOverScene, transition: reveal)
         }
     }
     
