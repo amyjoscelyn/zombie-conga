@@ -70,6 +70,8 @@ class GameScene: SKScene
     
     override func didMove(to view: SKView)
     {
+        playBackgroundMusic(filename: "backgroundMusic.mp3")
+        
         backgroundColor = SKColor.black
         
         let background = SKSpriteNode(imageNamed: "background1")
@@ -152,6 +154,8 @@ class GameScene: SKScene
         {
             gameOver = true
             print("You lose!")
+            
+            backgroundMusicPlayer.stop()
             
             let gameOverScene = GameOverScene(size: size, won: false)
             gameOverScene.scaleMode = scaleMode
@@ -405,6 +409,8 @@ class GameScene: SKScene
         {
             gameOver = true
             print("You win!")
+            
+            backgroundMusicPlayer.stop()
             
             let gameOverScene = GameOverScene(size: size, won: true)
             gameOverScene.scaleMode = scaleMode

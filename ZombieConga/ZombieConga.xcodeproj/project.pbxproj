@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D0520CF1DD0FAF60030910A /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0520CE1DD0FAF60030910A /* MainMenuScene.swift */; };
 		3D189D731DC95CD600557B1F /* backgroundMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3D189D6E1DC95CD600557B1F /* backgroundMusic.mp3 */; };
 		3D189D741DC95CD600557B1F /* hitCat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3D189D6F1DC95CD600557B1F /* hitCat.wav */; };
 		3D189D751DC95CD600557B1F /* hitCatLady.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3D189D701DC95CD600557B1F /* hitCatLady.wav */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D0520CE1DD0FAF60030910A /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		3D189D6E1DC95CD600557B1F /* backgroundMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundMusic.mp3; sourceTree = "<group>"; };
 		3D189D6F1DC95CD600557B1F /* hitCat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCat.wav; sourceTree = "<group>"; };
 		3D189D701DC95CD600557B1F /* hitCatLady.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCatLady.wav; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				3DDE7F021DC78BF2003FD986 /* AppDelegate.swift */,
+				3D0520CE1DD0FAF60030910A /* MainMenuScene.swift */,
 				3DDE7F081DC78BF2003FD986 /* GameScene.swift */,
 				3DFCD99B1DCA914600DF0BE5 /* GameOverScene.swift */,
 				3DDE7F0A1DC78BF2003FD986 /* GameViewController.swift */,
@@ -166,6 +169,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D0520CF1DD0FAF60030910A /* MainMenuScene.swift in Sources */,
 				3DFCD99C1DCA914600DF0BE5 /* GameOverScene.swift in Sources */,
 				3DDE7F091DC78BF2003FD986 /* GameScene.swift in Sources */,
 				3DDE7F0B1DC78BF2003FD986 /* GameViewController.swift in Sources */,
