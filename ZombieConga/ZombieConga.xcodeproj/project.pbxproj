@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D0520CF1DD0FAF60030910A /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0520CE1DD0FAF60030910A /* MainMenuScene.swift */; };
+		3D0520F51DD156FF0030910A /* GLIMSTIC.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 3D0520F41DD156FF0030910A /* GLIMSTIC.TTF */; };
 		3D189D731DC95CD600557B1F /* backgroundMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3D189D6E1DC95CD600557B1F /* backgroundMusic.mp3 */; };
 		3D189D741DC95CD600557B1F /* hitCat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3D189D6F1DC95CD600557B1F /* hitCat.wav */; };
 		3D189D751DC95CD600557B1F /* hitCatLady.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3D189D701DC95CD600557B1F /* hitCatLady.wav */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		3D0520CE1DD0FAF60030910A /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
+		3D0520F41DD156FF0030910A /* GLIMSTIC.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = GLIMSTIC.TTF; sourceTree = "<group>"; };
 		3D189D6E1DC95CD600557B1F /* backgroundMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundMusic.mp3; sourceTree = "<group>"; };
 		3D189D6F1DC95CD600557B1F /* hitCat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCat.wav; sourceTree = "<group>"; };
 		3D189D701DC95CD600557B1F /* hitCatLady.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCatLady.wav; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				3DDE7F0F1DC78BF2003FD986 /* Assets.xcassets */,
 				3DDE7F111DC78BF2003FD986 /* LaunchScreen.storyboard */,
 				3DDE7F141DC78BF2003FD986 /* Info.plist */,
+				3D0520F41DD156FF0030910A /* GLIMSTIC.TTF */,
 			);
 			path = ZombieConga;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D0520F51DD156FF0030910A /* GLIMSTIC.TTF in Resources */,
 				3DDE7F0E1DC78BF2003FD986 /* Main.storyboard in Resources */,
 				3D189D771DC95CD600557B1F /* win.wav in Resources */,
 				3D189D741DC95CD600557B1F /* hitCat.wav in Resources */,
